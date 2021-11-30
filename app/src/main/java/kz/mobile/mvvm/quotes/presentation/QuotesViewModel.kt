@@ -1,5 +1,6 @@
 package kz.mobile.mvvm.quotes.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +12,7 @@ class QuotesViewModel(
     private val quoteRepository: QuoteRepository
 ) : ViewModel() {
 
-    private val quotesLiveData = MutableLiveData<List<Quote>>()
+    val quotesLiveData = MutableLiveData<List<Quote>>()
 
     fun getQuotesLiveData(): LiveData<List<Quote>> = quotesLiveData
 
@@ -26,9 +27,9 @@ class QuotesViewModel(
     }
 
     fun addQuote(quote: Quote) {
+        Log.d("Akma",quote.toString())
         CoroutineScope(Dispatchers.IO).launch {
             quoteRepository.addQuote(quote)
-
         }
     }
 }

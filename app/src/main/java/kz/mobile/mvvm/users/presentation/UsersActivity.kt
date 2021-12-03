@@ -7,11 +7,16 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import kz.mobile.mvvm.R
+import kz.mobile.mvvm.firebase.presentation.LoginActivity
+import kz.mobile.mvvm.firebase.presentation.RegistrationActivity
 import kz.mobile.mvvm.users.adapter.UsersAdapter
 import kz.mobile.mvvm.users.domain.models.User
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,19 +34,31 @@ class UsersActivity : AppCompatActivity() {
     private lateinit var surnameEditText: EditText
     private lateinit var uploadImageView: ImageView
     private lateinit var chosenImage: ImageView
+    private lateinit var signOutButton: Button
     private var chosenImageUri: Uri? = null
     private var usersAdapter: UsersAdapter? = null
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseUser: FirebaseUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.users_activity)
         initViews()
+        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseUser = firebaseAuth.currentUser!!
         uploadImageView.setOnClickListener {
             launchGallery()
         }
         initializeAdapter()
         observeViewModel()
         initClickListeners()
+
+        signOutButton.setOnClickListener {
+            firebaseAuth.signOut()
+            startActivity(Intent(this, LoginActivity::class.java))
+            Toast.makeText(this, "signed out", Toast.LENGTH_SHORT).show()
+            finish()
+        }
     }
 
     private fun launchGallery() {
@@ -68,6 +85,7 @@ class UsersActivity : AppCompatActivity() {
         surnameEditText = findViewById(R.id.editText_surname)
         uploadImageView = findViewById(R.id.uploadImageView)
         chosenImage = findViewById(R.id.chosenImage)
+        signOutButton = findViewById(R.id.signOutButton)
     }
 
     private fun initializeAdapter() {
@@ -92,11 +110,11 @@ class UsersActivity : AppCompatActivity() {
     }
 
     private fun addUser() {
-        if(chosenImageUri == null) return
+        if (chosenImageUri == null) return
 
         val nameText: String = nameEditText.text.toString()
         val surnameText: String = surnameEditText.text.toString()
-        val chosenImageUri : Uri = chosenImageUri as Uri
+        val chosenImageUri: Uri = chosenImageUri as Uri
         val user = User(
             name = nameText,
             surname = surnameText,

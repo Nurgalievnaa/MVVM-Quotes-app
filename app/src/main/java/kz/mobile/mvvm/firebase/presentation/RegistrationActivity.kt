@@ -36,7 +36,6 @@ class RegistrationActivity : AppCompatActivity() {
         }
 
         backTextView.setOnClickListener {
-            startActivity(Intent(this, UsersActivity::class.java))
             Toast.makeText(this, "please sign into your account", Toast.LENGTH_SHORT).show()
             finish()
         }
@@ -76,7 +75,7 @@ class RegistrationActivity : AppCompatActivity() {
                 }
             }
         } else {
-            Toast.makeText(this, "passwords are not matching !", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Passwords are not matching !", Toast.LENGTH_SHORT).show()
         }
         return identical
     }

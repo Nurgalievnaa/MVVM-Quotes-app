@@ -38,14 +38,14 @@ class UsersActivity : AppCompatActivity() {
     private var chosenImageUri: Uri? = null
     private var usersAdapter: UsersAdapter? = null
     private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var firebaseUser: FirebaseUser
+    private var firebaseUser: FirebaseUser? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.users_activity)
         initViews()
         firebaseAuth = FirebaseAuth.getInstance()
-        firebaseUser = firebaseAuth.currentUser!!
+        firebaseUser = firebaseAuth.currentUser
         uploadImageView.setOnClickListener {
             launchGallery()
         }

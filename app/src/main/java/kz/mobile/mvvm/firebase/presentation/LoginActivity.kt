@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kz.mobile.mvvm.R
+import kz.mobile.mvvm.movies.presentation.MainActivity
 import kz.mobile.mvvm.users.presentation.UsersActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -34,7 +35,6 @@ class LoginActivity : AppCompatActivity() {
         signInInputsArray = arrayOf(emailLogin, passwordLogin)
         signUpTextView.setOnClickListener {
             startActivity(Intent(this, RegistrationActivity::class.java))
-            finish()
         }
 
         loginButton.setOnClickListener {
@@ -59,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
             firebaseAuth.signInWithEmailAndPassword(loginEmail, loginPassword)
                 .addOnCompleteListener { signIn ->
                     if (signIn.isSuccessful) {
-                        startActivity(Intent(this, UsersActivity::class.java))
+                        startActivity(Intent(this, MainActivity::class.java))
                         Toast.makeText(this, "signed in successfully", Toast.LENGTH_SHORT).show()
                         finish()
                     } else {
